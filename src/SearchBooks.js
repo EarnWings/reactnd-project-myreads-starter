@@ -7,18 +7,20 @@ class SearchBooks extends Component {
   state = {
     books: [], 
     query: '',
-    shelf: []
+    //shelf: []
   }
 
   searchBooks = (query) => {
-    if (!query || (query === '')) {
+    if (!query || (query === '') || (query == undefined)) {
       this.setState({ books: [] })
     } else {
       BooksAPI.search(query).then((book) => {
-        if(!book.length) {
-          this.setState({ books: [] })
-        } else {
-          this.setState({ books: book })
+        if (query === this.state.query) {
+          if(!book.length) {
+            this.setState({ books: [] })
+          } else {
+            this.setState({ books: book })
+          }
         }
       })
     }
@@ -49,8 +51,8 @@ class SearchBooks extends Component {
             */}
             <input
     					type="text"
-		       		placeholder="Search by title or author"
-				      value={this.state.query}
+		       		placeholder="Search books"
+				      
 				      onChange={(event) => {this.updateQuery(event.target.value)}}
 					  />
           </div>
