@@ -5,13 +5,12 @@ import * as BooksAPI from './BooksAPI.js';
 
 class SearchBooks extends Component {
   state = {
-    books: [], 
-    query: '',
-    //shelf: []
+      books: [],
+      query: ''
   }
 
   searchBooks = (query) => {
-    if (!query || (query === '') || (query == undefined)) {
+    if (!query || (query === '') || (query === undefined)) {
       this.setState({ books: [] })
     } else {
       BooksAPI.search(query).then((book) => {
