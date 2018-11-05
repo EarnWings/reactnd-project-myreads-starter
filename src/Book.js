@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import App from './App';
 
 class Book extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: this.props.books
+    }
+  }
 
   render() {
     return(
@@ -11,7 +18,7 @@ class Book extends Component {
               <img alt={this.props.title} src={this.props.imageLinks ? this.props.imageLinks.smallThumbnail : ''}></img>
             </div>
             <div className="book-shelf-changer">
-              <select value ={this.props.book.shelf ? this.props.book.shelf : "none"} onChange={(event) => {this.props.updateBook(this.props.book, event.target.value)}}>
+              <select value ={this.props.book.shelf || "none"} onChange={(event) => {this.props.updateBook(this.props.book, event.target.value)}}>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
