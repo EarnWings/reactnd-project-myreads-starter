@@ -7,10 +7,11 @@ class BookList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: []
+      books: this.props.books,
+      shelvedBooks: this.props.shelvedBooks
     }
   }
-  
+
   componentDidMount() {
     BooksAPI.getAll().then((books => {
       this.setState ({ books })
@@ -32,9 +33,11 @@ class BookList extends Component {
         <div className="list-books-content">
           {Object.keys(shelves).map((shelf) =>
             <Shelf key={shelf}
-              updateBook = {this.props.updateBook}
-              name = {shelves[shelf][0]}
-              books = {this.state.books.filter(bk => bk.shelf === shelves[shelf][1])} />
+              onUpdateBook={this.props.onUpdateBook}
+              name={shelves[shelf][0]}
+              books={this.state.books.filter(bk => bk.shelf === shelves[shelf][1])} 
+              shelvedBooks={this.props.shelvedBooks}
+            />
           )}
         </div>
         <div className="open-search">

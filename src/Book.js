@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import App from './App';
+import Dropdown from './Dropdown';
 
 class Book extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: this.props.books
+      books: this.props.books,
+      shelvedBooks: this.props.shelvedBooks
     }
   }
 
@@ -17,15 +19,7 @@ class Book extends Component {
             <div className="book-cover">
               <img alt={this.props.title} src={this.props.imageLinks ? this.props.imageLinks.smallThumbnail : ''}></img>
             </div>
-            <div className="book-shelf-changer">
-              <select value ={this.props.book.shelf || "none"} onChange={(event) => {this.props.updateBook(this.props.book, event.target.value)}}>
-                <option value="move" disabled>Move to...</option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
-                <option value="none">None</option>
-              </select>
-            </div>
+            <Dropdown book={this.props.book} shelvedBooks={this.props.shelvedBooks} onUpdateBook={this.props.onUpdateBook} />
           </div>
           <div className="book-title">{this.props.title}</div>
           <div className="book-authors">{this.props.authors}</div>

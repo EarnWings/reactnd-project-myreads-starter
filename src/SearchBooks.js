@@ -8,22 +8,24 @@ class SearchBooks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: this.props.books,
-      allBooks: [],
+      shelvedBooks: [],
+      books: [],
       query: ''
     }
   }
 
   searchBooks = (query) => {
     if (!query || (query === '') || (query === undefined)) {
-      this.setState({ allBooks: [] })
+      this.setState({ books: [] })
     } else {
-      BooksAPI.search(query).then((book) => {
+      BooksAPI
+        .search(query)
+        .then((book) => {
         if (query === this.state.query) {
           if(!book.length) {
-            this.setState({ allBooks: [] })
+            this.setState({ books: [] })
           } else {
-            this.setState({ allBooks: book })
+            this.setState({ books: book })
           }
         }
       })
@@ -63,8 +65,8 @@ class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.allBooks.map(book =>
-              <Book updateBook = {this.props.updateBook} book={book} key={book.id} {...book} />)
+            {this.state.books.map(book =>
+              <Book updateBook={this.props.updateBook} shelvedBook={this.state.shelvedBooks} book={book} key={book.id} {...book} />)
             }
           </ol>
         </div>

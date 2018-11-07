@@ -2,9 +2,16 @@ import React, { Component } from 'react';
 import Book from './Book.js';
 
 class Shelf extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: this.props.books
+    }
+  }
+
   render() {
     let addBooks = (book) => {
-      return (<Book updateBook = {this.props.updateBook} book={book} key={book.id} {...book} />)
+      return (<Book onUpdateBook={this.props.onUpdateBook} shelvedBooks={this.props.shelvedBooks} book={book} key={book.id} books={this.props.books} {...book} />)
     }
 
     return(
