@@ -1,13 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Book from './Book';
-import * as BooksAPI from './BooksAPI';
-import * as BookUtils from './BookUtils'
+import Book from './Book.js';
+import * as BooksAPI from './BooksAPI.js';
+import App from './App';
 
 class SearchBooks extends Component {
-  state = {
-    books: [],
-    query: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      shelvedBooks: [],
+      books: [],
+      query: ''
+    }
+  }
+
+  searchBooks = (query) => {
+    if (!query || (query === '') || (query === undefined)) {
+      this.setState({ books: [] })
+    } else {
+      BooksAPI
+        .search(query)
+        .then((book) => {
+        if (query === this.state.query) {
+          if(!book.length) {
+            this.setState({ books: [] })
+          } else {
+            this.setState({ books: book })
+          }
+        }
+      })
+    }
   }
 
   updateQuery(query) {
@@ -17,32 +39,6 @@ class SearchBooks extends Component {
 
   clearQuery = () => {
     this.setState({ query:'' })
-  }
-
-  searchBooks = (query) => {
-    if (!query || (query === '') || (query === undefined)) {
-      this.setState({ books: [] })
-    } else {
-      if (query === this.state.query) {
-        BooksAPI
-          .search(query)
-          .then(response => {
-            let newList = [];
-            if (response.length) {
-              newList = BookUtils.mergeShelvesAndSearch(this.props.selectedBooks, response);
-              newList = BookUtils.sortAllBooks(newList);
-            }
-            this.setState({ books: newList });
-          })
-      }
-    }
-  }
-
-  componentWillReceiveProps = (props) => {
-    this.props = props;
-    let newList = BookUtils.mergeShelvesAndSearch(this.props.selectedBooks, this.state.books);
-    newList = BookUtils.sortAllBooks(newList);
-    this.setState({ books: newList });
   }
 
   render() {
@@ -62,6 +58,7 @@ class SearchBooks extends Component {
             <input
     					type="text"
 		       		placeholder="Search books"
+				      
 				      onChange={(event) => {this.updateQuery(event.target.value)}}
 					  />
           </div>
@@ -69,10 +66,8 @@ class SearchBooks extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {this.state.books.map(book =>
-              <li key={book.id}>
-                <Book onUpdateBook={this.props.onUpdateBook} onChangeShelf={this.props.onChangeShelf} />
-              </li>
-            )}
+              <Book updateBook={this.props.updateBook} shelvedBook={this.state.shelvedBooks} book={book} key={book.id} {...book} />)
+            }
           </ol>
         </div>
       </div>
@@ -80,4 +75,4 @@ class SearchBooks extends Component {
   }
 }
 
-export default SearchBooks;
+export default SearchBooks

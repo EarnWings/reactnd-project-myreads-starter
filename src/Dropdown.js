@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
+import App from './App';
+import Book from './Book';
+import BookList from './BookList';
+import Shelf from './Shelf';
 
 class Dropdown extends Component {
-  state = {
-  	shelfSelection: this.props.book.shelf || 'none'
+  constructor(props) {
+    super(props);
+    this.state = {
+      books: this.props.books,
+      shelvedBooks: this.props.shelvedBooks
+    }
   }
 
-  onUpdateBook = (book, shelf) => {
-  	//set the state for the shelf selection and make the call back up the chaim
-  	this.setState({shelfSelection: shelf});
-  	this
-  		.props
-  		.onUpdateBook(book, shelf);
-  }
-
-  componentWillReceiveProps = (props) => {
-  	this.props = props;
-  	this.setState({shelfSelection: this.props.book.shelf});
-  }
-
-  render = () => {
+  render() {
   	return (
   		<div className="book-shelf-changer">
-		  <select 
-		  	value={this.state.shelfSelection} 
-		  	onChange={(event) => this.onUpdateBook(this.props.book, event.target.value)}>
+		  <select value={this.props.book.shelf || "none"} onChange={(event) => {this.props.onUpdateBook(this.props.book, event.target.value)}}>
 		    <option value="move" disabled>Move to...</option>
 		    <option value="currentlyReading">Currently Reading</option>
 		    <option value="wantToRead">Want to Read</option>
@@ -35,4 +28,4 @@ class Dropdown extends Component {
   }
 }
  
-export default Dropdown;
+export default Dropdown
