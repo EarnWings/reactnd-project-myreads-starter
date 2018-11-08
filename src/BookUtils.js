@@ -30,5 +30,3 @@ export const mergeShelvesAndSearch = (shelf, search) => {
 
 	return search;
 }
-
-export default BookUtils
