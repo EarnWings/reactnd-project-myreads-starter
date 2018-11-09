@@ -1,29 +1,50 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Shelf from './Shelf.js';
-import * as BooksAPI from './BooksAPI.js';
+import Shelf from './Shelf';
 
 class BookList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: this.props.books,
-      shelvedBooks: this.props.shelvedBooks
-    }
+  state = {}
+
+  componentDidMount = () => {
+    //update list of all books
+    this
+      .props
+      .onUpdateBook();
   }
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books => {
-      this.setState ({ books })
-    }))
+  updateShelves = () => {
+    //Update the state of individual shelves to contain the 
+    //appropriate books for each shelf
+    const newCurrent = {
+      name: "Currently Reading",
+      books: this
+        .props
+        .books
+        .filter(book => book.shelf === 'currentlyReading')
+    };
+    const newWant = {
+      name: "Want to Read",
+      books: this
+        .props
+        .books
+        .filter(book => book.shelf === 'wantToRead')
+    };
+    const newRead = {
+      name: "Read",
+      books: this
+        .props
+        .books
+        .filter(book => book.shelf === 'read')
+    };
+
+    return ([newCurrent, newWant, newRead]);
   }
 
   render() {
-    const shelves = {
-      currentlyReading: ['Currently Reading', 'currentlyReading'],
-      wantToRead: ['Want to Read', 'wantToRead'],
-      read: ['Read', 'read']
-    }
+    let shelves = [];
+      if (this.props.books && this.props.books.length) {
+        shelves = this.updateShelves();
+      }
 
     return(
       <div className="list-books">
@@ -31,14 +52,12 @@ class BookList extends Component {
           <h1>MyReads</h1>
         </div>
         <div className="list-books-content">
-          {Object.keys(shelves).map((shelf) =>
-            <Shelf key={shelf}
-              onUpdateBook={this.props.onUpdateBook}
-              name={shelves[shelf][0]}
-              books={this.state.books.filter(bk => bk.shelf === shelves[shelf][1])} 
-              shelvedBooks={this.props.shelvedBooks}
-            />
-          )}
+          {shelves && shelves.map((shelf) => (<Shelf
+            key={shelf.name} 
+            shelf={shelf} 
+            onUpdateBook={this.props.onUpdateBook}
+            onChangeShelf={this.props.onChangeShelf}
+          />))}
         </div>
         <div className="open-search">
           <Link to="/add-a-book">Add a book</Link>

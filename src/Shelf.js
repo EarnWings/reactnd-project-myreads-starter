@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
-import Book from './Book.js';
+import Book from './Book';
 
 class Shelf extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: this.props.books
-    }
-  }
+  state = {}
 
   render() {
-    let addBooks = (book) => {
-      return (<Book onUpdateBook={this.props.onUpdateBook} shelvedBooks={this.props.shelvedBooks} book={book} key={book.id} books={this.props.books} {...book} />)
-    }
-
     return(
       <div className="bookshelf">
-        <h2 className="bookshelf-title"> {this.props.name} </h2>
+        <h2 className="bookshelf-title"> {this.props.shelf.name} </h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {this.props.books.map(addBooks)}
+            {this
+              .props
+              .shelf
+              .books
+              .map(book => (
+                <li key={book.id}>
+                  <Book 
+                    book={book}
+                    onUpdateBook={this.props.onUpdateBook}
+                    onChangeShelf={this.props.onChangeShelf}
+                  />
+                </li>
+              ))}
           </ol>
         </div>
       </div>
@@ -27,4 +30,4 @@ class Shelf extends Component {
   }
 }
 
-export default Shelf
+export default Shelf;
