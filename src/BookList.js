@@ -32,7 +32,7 @@ class BookList extends Component {
         <div className="list-books-content">
           {Object.keys(shelves).map((shelf) =>
             <Shelf key={shelf}
-              updateBook ={this.props.updateBook}
+              updateBook = {this.props.updateBook}
               name = {shelves[shelf][0]}
               books = {this.state.books.filter(bk => bk.shelf === shelves[shelf][1])} />
           )}

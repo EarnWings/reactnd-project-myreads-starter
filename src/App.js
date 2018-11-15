@@ -24,10 +24,10 @@ state=({
     return (
       <div className="app">
         <Route exact path="/" render={() =>(
-          <BookList updateBook = {this.updateBook}/>
+          <BookList updateBook = {this.updateBook} />
         )}/>
         <Route path="/add-a-book" render={() => (
-          <SearchBooks updateBook = {this.updateBook}/>
+          <SearchBooks updateBook = {this.updateBook} />
         )}/>
       </div>
     )
